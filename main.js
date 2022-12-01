@@ -51,7 +51,7 @@ const createWindow = () => {
     dialog
       .showSaveDialog({
         title: 'Select the File Path to save',
-        defaultPath: 'C:\\Users\\sehwan\\Downloads',
+        defaultPath: path.join(__dirname, './'),
         buttonLabel: 'Save',
         filters: [
           {
