@@ -2,7 +2,6 @@ const {
   app,
   BrowserWindow,
   dialog,
-  remote,
   ipcMain,
   nativeTheme,
 } = require('electron');
