@@ -1,0 +1,14 @@
+{
+  "name": "Electron-Text-Editor",
+  "version": "1.0.0",
+  "description": "Electron Text Editor",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Sehwan LEe",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^20.1.3"
+  }
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <!-- <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    /> -->
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>Electron Text Editor</title>
+  </head>
+
+  <body>
+    <div class="text-editor">
+      <div class="editor-binding">
+        <div class="button-group">
+          <button class="button" onclick="removeText()">New</button>
+          <button class="button" onclick="openText()">Open</button>
+          <button class="button" onclick="saveTextAsFile()">Save</button>
+          <button class="button" onclick="">Save As</button>
+        </div>
+      </div>
+      <div id="editor-content" class="editor-content">
+        <div id="editor-header" class="editor-header">
+          <input
+            type="text"
+            id="editor-title"
+            class="editor-title"
+            placeholder="Untitled Note"
+          />
+        </div>
+        <div id="editor-body" class="editor-body">
+          <div class="editor-margin"></div>
+          <textarea
+            id="editor-input"
+            class="editor-input"
+            placeholder="Start typing here..."
+          ></textarea>
+        </div>
+      </div>
+
+
+    <script src="./js/scripts.js"></script>
+  </body>
+</html>
