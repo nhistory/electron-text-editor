@@ -15,37 +15,44 @@ function toggleHeaderShadow() {
   }
 }
 
+let openedPath;
+
+// Make new txt file
 function removeText() {
   localStorage.clear();
   editorTitle.value = '';
   editorInput.value = '';
+  openedPath = '';
 }
 
+// Open txt file existed
 function openText() {
   window.textEditor.open();
 }
 
 window.textEditor.sendDocument(async (_event, value) => {
+  console.log(value);
   editorTitle.value = value.title;
   editorInput.value = value.content;
+  openedPath = value.filePath;
 });
 
-function saveTextAsFile() {
-  const documentContent = editorInput.value;
-  const textFileAsBlob = new Blob([documentContent], {
-    type: 'text/plain',
-  });
-  const fileNameToSaveAs = editorTitle.value
-    ? editorTitle.value
-    : 'Untitled Note';
-  const downloadLink = document.createElement('a');
-  downloadLink.download = fileNameToSaveAs;
-  downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-  document
-    .getElementsByClassName('editor-binding')[0]
-    .appendChild(downloadLink);
-  downloadLink.click();
-  downloadLink.remove();
+// Save txt file
+function saveText() {
+  const title = editorTitle.value;
+  const content = editorInput.value;
+  if (!openedPath) {
+    window.textEditor.saveAs({ title, content });
+  } else {
+    window.textEditor.save({ title, content, openedPath });
+  }
+}
+
+// Save as txt file
+function saveAsText() {
+  const title = editorTitle.value;
+  const content = editorInput.value;
+  window.textEditor.saveAs({ title, content });
 }
 
 function saveToLocalStorage() {

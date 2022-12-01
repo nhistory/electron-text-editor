@@ -2,6 +2,7 @@ const {
   app,
   BrowserWindow,
   dialog,
+  remote,
   ipcMain,
   nativeTheme,
 } = require('electron');
@@ -22,11 +23,12 @@ const createWindow = () => {
   mainWindow.loadFile('index.html');
 
   // hide main menu
-  //mainWindow.setMenuBarVisibility(false);
+  mainWindow.setMenuBarVisibility(false);
 
   // dark mode
   nativeTheme.themeSource = 'dark';
 
+  // show dialog window to open txt file
   ipcMain.handle('text-editor:open', () => {
     dialog
       .showOpenDialog({
@@ -40,6 +42,49 @@ const createWindow = () => {
         openFile(filePath);
       });
   });
+
+  // show dialog window to save txt file
+  // https://www.geeksforgeeks.org/save-files-in-electronjs/
+  ipcMain.on('text-editor:save-as', (event, { title, content }) => {
+    console.log(title, content);
+
+    dialog
+      .showSaveDialog({
+        title: 'Select the File Path to save',
+        defaultPath: 'C:\\Users\\sehwan\\Downloads',
+        buttonLabel: 'Save',
+        filters: [
+          {
+            name: 'Text Files',
+            extensions: 'txt',
+          },
+        ],
+        properties: [],
+      })
+      .then((file) => {
+        console.log(file.canceled);
+        if (!file.canceled) {
+          console.log(file.filePath.toString());
+
+          fs.writeFile(file.filePath.toString(), content, (err) => {
+            if (err) throw err;
+            console.log('Saved!');
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+  // save txt file without showing dialog window
+  ipcMain.on('text-editor:save', (event, { title, content, openedPath }) => {
+    console.log(title, content, openedPath);
+    fs.writeFile(openedPath, content, (err) => {
+      if (err) throw err;
+      console.log('Saved!');
+    });
+  });
 };
 
 const openFile = (filePath) => {
@@ -48,7 +93,11 @@ const openFile = (filePath) => {
     console.log(content);
     //app.addRecentDocument(filePath);
     //openedFilePath = filePath;
-    mainWindow.webContents.send('document-opened', { title, content });
+    mainWindow.webContents.send('document-opened', {
+      title,
+      content,
+      filePath,
+    });
   });
 };
 
